@@ -4,8 +4,12 @@ class Task:
         self.prices = []
 
     def add_price(self, price):
+        # print(price)
         self.prices.append(price)
 
+    def get_prices(self):
+        print(len(self.prices))
+        return self.prices
 
 class TaskList:
 
