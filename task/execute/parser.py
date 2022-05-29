@@ -8,8 +8,7 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chromium.options import ChromiumOptions
 from selenium import webdriver
-
-SLEEP = 2
+from settings import URL_WB_MAIN, SLEEP, WEBDRIVER_HEADLESS
 
 
 class TaskExe:
@@ -18,7 +17,7 @@ class TaskExe:
         self.driver = None
         self.options = ChromiumOptions()
         # self.options.headless = True
-        self.base_url = ("https://www.wildberries.ru/")
+        self.base_url = URL_WB_MAIN
 
     def exe(self, task) -> Task:
         try:
@@ -135,7 +134,7 @@ class TaskExe:
 
     def start(self):
 
-        # self.options.headless = True
+        self.options.headless = WEBDRIVER_HEADLESS
         self.driver = webdriver.Chrome(options=self.options)
         self.driver.maximize_window()
         self.driver.get(self.base_url)
@@ -152,16 +151,16 @@ class TaskExe:
 
 
 if __name__ == '__main__':
-    # pass
-
-    # driver = webdriver.Chrome('/path/to/chromedriver')  # Optional argument, if not specified will search path.
-
-    driver = webdriver.Chrome()  # Optional argument, if not specified will search path.
-    driver.get('http://www.google.com/')
-    time.sleep(5)  # Let the user actually see something!
-    # search_box = driver.find_element_by_name('q')
-    search_box = driver.find_element(by=By.NAME, value='q')
-    search_box.send_keys('ChromeDriver')
-    search_box.submit()
-    time.sleep(50)  # Let the user actually see something!
-    driver.quit()
+    pass
+    #
+    # # driver = webdriver.Chrome('/path/to/chromedriver')  # Optional argument, if not specified will search path.
+    #
+    # driver = webdriver.Chrome()  # Optional argument, if not specified will search path.
+    # driver.get('http://www.google.com/')
+    # time.sleep(5)  # Let the user actually see something!
+    # # search_box = driver.find_element_by_name('q')
+    # search_box = driver.find_element(by=By.NAME, value='q')
+    # search_box.send_keys('ChromeDriver')
+    # search_box.submit()
+    # time.sleep(50)  # Let the user actually see something!
+    # driver.quit()

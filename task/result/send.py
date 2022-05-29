@@ -1,7 +1,7 @@
 from generator import Task
 import time
 import requests
-from settings import URL_SERVER, URL_WB_SEARCH, URL_WB_MAIN
+from settings import URL_SERVER
 
 
 class TaskSend:
