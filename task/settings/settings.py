@@ -48,3 +48,6 @@ if value:
 # THREADS_COUNT = settings["THREADS_COUNT"] if settings["THREADS_COUNT"] else THREADS_COUNT
 # WEBDRIVER_HEADLESS = settings["WEBDRIVER_HEADLESS"] if settings["WEBDRIVER_HEADLESS"] else WEBDRIVER_HEADLESS
 # SLEEP = settings["SLEEP"] if settings["SLEEP"] else SLEEP
+
+# python3 -m pip freeze > requirements.txt
+# pip3 install -r requirements.txt
