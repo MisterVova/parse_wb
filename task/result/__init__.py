@@ -1,2 +1,2 @@
-from result.sample import TaskSend
-# from result.send import TaskSend
+from .send import TaskSend
+

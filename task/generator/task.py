@@ -1,8 +1,8 @@
 import time
 
 import requests
-from settings import URL_SERVER, URL_WB_SEARCH, URL_WB_MAIN
-
+from task.settings import URL_SERVER, URL_WB_SEARCH, URL_WB_MAIN
+from task.settings import SLEEP
 
 class Key:
     row = "row"
@@ -71,25 +71,35 @@ class TaskList:
 
     # count = 0
     def get_Objs(self):
+        has_error = 0
         while True:
-
-            response = requests.get(URL_SERVER)
+            try:
+                 response = requests.get(URL_SERVER)
+                 has_error = 0
+            except:
+                time.sleep(SLEEP * has_error)
+                has_error += 1
+                if has_error > 20: has_error = 20
 
             if response.status_code != 200:
                 # sek = 6 * 3
                 # print(f"response.status_code={response.status_code} ждем {sek} секунд")
                 # time.sleep(sek)
+                print("Ошибка при получении задания")
                 yield {Key.key: Key.wait, Key.value: 30}
+
                 continue
 
             try:
                 obj = response.json()
             except:
+                print("Заданий нет")
                 obj = None
 
             # print(obj)
             if not obj:
                 break
+            has_error = 0
             yield obj
 
     def start(self):

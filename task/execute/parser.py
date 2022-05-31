@@ -8,7 +8,7 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chromium.options import ChromiumOptions
 from selenium import webdriver
-from settings import URL_WB_MAIN, SLEEP, WEBDRIVER_HEADLESS
+from task.settings import URL_WB_MAIN, SLEEP, WEBDRIVER_HEADLESS
 
 
 class TaskExe:
@@ -16,7 +16,7 @@ class TaskExe:
     def __init__(self):
         self.driver = None
         self.options = ChromiumOptions()
-        # self.options.headless = True
+
         self.base_url = URL_WB_MAIN
 
     def exe(self, task) -> Task:
@@ -135,7 +135,8 @@ class TaskExe:
     def start(self):
 
         self.options.headless = WEBDRIVER_HEADLESS
-        self.driver = webdriver.Chrome(options=self.options)
+        # self.options.headless
+        self.driver = webdriver.Chrome(executable_path="chromedriver.exe",options=self.options)
         self.driver.maximize_window()
         self.driver.get(self.base_url)
         # self.driver.implicitly_wait(10)

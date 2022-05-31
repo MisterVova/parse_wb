@@ -1,6 +1,6 @@
 import threading
 import datetime
-from settings import URL_SERVER, URL_WB_SEARCH, URL_WB_MAIN, THREADS_COUNT
+from task.settings import THREADS_COUNT,SLEEP
 # from task import Task
 import time
 
@@ -19,23 +19,26 @@ class ThreadParser(threading.Thread):
 
         # steep = 0
         for task in self.task_list.get_tasks():
-            # print("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
-            # print(datetime.datetime.now(), "Steep", steep, "Start", sep=": ")
-            print(self.name, task.url)
-            # try:
-            self.task_exe.exe(task)
-            # except Exception:
-            #     pass
-            self.task_send.exe(task)
-            print(self.name, f"кол_во: {len(task.get_prices())}", task.url, sep=" | ")
-            # print(task.__dict__)
-            # print(datetime.datetime.now(), "Steep", steep, "Finish", sep=": ")
-            # steep += 1
-            # if steep > 10:
-            #     break
-            # time.sleep(1)
-            # print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-            # print()
+            try:
+                # print("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
+                # print(datetime.datetime.now(), "Steep", steep, "Start", sep=": ")
+                print(self.name, task.url)
+                # try:
+                self.task_exe.exe(task)
+                # except Exception:
+                #     pass
+                self.task_send.exe(task)
+                print(self.name, f"кол_во: {len(task.get_prices())}", task.url, sep=" | ")
+                # print(task.__dict__)
+                # print(datetime.datetime.now(), "Steep", steep, "Finish", sep=": ")
+                # steep += 1
+                # if steep > 10:
+                #     break
+                # time.sleep(1)
+                # print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+                # print()
+            except:
+                print("Ошибка при парсера")
         # print(datetime.datetime.now(), "End")
 
     def before_start(self):
@@ -60,7 +63,7 @@ class ThreadTaskExe(threading.Thread):
     def run(self):
         for tp in self.threads_parser:
             tp.start()
-            time.sleep(1)
+            time.sleep(SLEEP)
 
         for tp in self.threads_parser:
             tp.join()
