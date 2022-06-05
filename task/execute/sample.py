@@ -1,4 +1,5 @@
-from generator import Task
+# from generator import Task
+from task.generator.simple import Task
 
 
 class TaskExe:
