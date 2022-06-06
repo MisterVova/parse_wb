@@ -1,6 +1,6 @@
 import json
 
-URL_SERVER = "https://script.google.com/macros/s/AKfycbyMVhB21t6diZPSJuToIvHujWj_/exec"
+URL_SERVER = "https://script.google.com/macros/s/AKfycbzvKtZYbc7S7i9V7Cz6UNaDjbFx0gYzW8vFPCtAWUITB0oy3Ws-yDiTYK4z6MnHEKIYGw/exec"
 URL_WB_MAIN = "https://www.wildberries.ru/"
 URL_WB_SEARCH = "https://www.wildberries.ru/catalog/0/search.aspx?sort=popular&search="
 THREADS_COUNT = 4

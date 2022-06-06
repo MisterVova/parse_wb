@@ -1,12 +1,15 @@
 import threading
 import datetime
+import traceback
+
+from task.generator.base_task import TaskList
 from task.settings import THREADS_COUNT,SLEEP
 # from task import Task
 import time
 
 class ThreadParser(threading.Thread):
 
-    def __init__(self, task_list, task_send, task_exe_class, name):
+    def __init__(self, task_list , task_send, task_exe_class, name):
         threading.Thread.__init__(self)
         self.name = name
         self.task_list = task_list
@@ -20,25 +23,14 @@ class ThreadParser(threading.Thread):
         # steep = 0
         for task in self.task_list.get_tasks():
             try:
-                # print("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
-                # print(datetime.datetime.now(), "Steep", steep, "Start", sep=": ")
-                print(self.name, task.url)
-                # try:
+                print(self.name, task, sep=" | ")
                 self.task_exe.exe(task)
-                # except Exception:
-                #     pass
                 self.task_send.exe(task)
-                print(self.name, f"кол_во: {len(task.get_prices())}", task.url, sep=" | ")
-                # print(task.__dict__)
-                # print(datetime.datetime.now(), "Steep", steep, "Finish", sep=": ")
-                # steep += 1
-                # if steep > 10:
-                #     break
-                # time.sleep(1)
-                # print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-                # print()
+                print(self.name, task, sep=" | ")
+
             except:
                 print("Ошибка при парсера")
+                traceback.print_exc()
         # print(datetime.datetime.now(), "End")
 
     def before_start(self):
@@ -67,9 +59,6 @@ class ThreadTaskExe(threading.Thread):
 
         for tp in self.threads_parser:
             tp.join()
-
-
-
 
     def before_start(self):
         count = THREADS_COUNT if THREADS_COUNT else 1

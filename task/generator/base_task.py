@@ -2,50 +2,46 @@ import time
 
 import requests
 
-from task.generator.key import Key
+from task.generator.key import Key, SheetNames
 from task.settings import URL_SERVER, URL_WB_SEARCH, URL_WB_MAIN
 from task.settings import SLEEP
 
 
-class Task:
+class BaseTask:
     def __init__(self, obj: dict):
-
         self.isValid = True
-        self.url = URL_WB_MAIN
+        # self.url = URL_WB_MAIN
         # self.prices = []
-        if type(obj) != dict:
-            self.isValid = False
-            return
 
         self.obj = obj
-        if not self.obj[Key.key]:
-            self.isValid = False
-        elif f"{self.obj[Key.key]}".find(URL_WB_MAIN) != -1:
-            self.url = f"{self.obj[Key.key]}"
-        else:
-            # https://www.wildberries.ru/catalog/0/search.aspx?sort=popular&search=%D0%BF%D1%80%D0%B8%D0%B2%D0%B5%D1%82+%D1%81%D0%BE%D1%81%D0%B5%D0%B4
-            self.url = f"{URL_WB_SEARCH}{self.obj[Key.key]}"
+        if type(self.obj) != dict:
+            # self.isValid = False
+            self.obj = dict()
+        # self.get_value()
 
-        if self.isValid:
-            self.obj[Key.prices] = []
-        else:
-            self.obj[Key.error] = "Ошибка Валидации"
+    def get_sheet_name(self):
+        return self.get_value(Key.sheetName, SheetNames.НеОпределён)
 
-        # print(self.url)
+    # def get_url(self):
+    #    return self.get_value(key=Key.url, default=URL_WB_MAIN)
 
-    def add_price(self, price):
-        self.obj[Key.prices].append(price)
+    def set_value(self, key: str, value):
+        self.obj[key] = value
 
-    def get_prices(self):
-        return self.obj[Key.prices]
+    def get_value(self, key: str, default):
+        # print(key, default, self.obj)
+        ret = self.obj[key]
+        return ret if ret else default
 
+    def __str__(self):
+        return self.get_value(Key.key,"____");
 
 class TaskList:
 
     def get_tasks(self):
         for obj in self.get_Objs():
             # print(obj)
-            task = Task(obj)
+            task = BaseTask(obj)
             if not task.isValid:
                 continue
 
@@ -59,14 +55,14 @@ class TaskList:
 
             yield task
 
-
     # count = 0
     def get_Objs(self):
         has_error = 0
         while True:
             try:
-                 response = requests.get(URL_SERVER)
-                 has_error = 0
+                response = requests.get(F"{URL_SERVER}?{Key.sheetName}={SheetNames.Предметы}")
+                has_error = 0
+                # print("response.text = ",response.text)
             except:
                 time.sleep(SLEEP * has_error)
                 has_error += 1
@@ -98,22 +94,3 @@ class TaskList:
 
     def end(self):
         print("end - TaskList")
-
-
-def connect():
-    # url = "https://script.google.com/macros/s/AKfycbx2Jm6G5vZLIgOYE8Bd2FWRevyn6KQKAGgEU4OTV4TUeIEYZ_RBFaJ7Ldau9MNzVTNq3w/exec"
-    response = requests.get(URL_SERVER)
-    print(response)
-    print(response.json())
-    print(type(response.json()))
-
-
-if __name__ == '__main__':
-    # import time
-
-    taskList = TaskList()
-    for t in taskList.get_tasks():
-        print(t.__dict__)
-        print("count", taskList.count)
-        time.sleep(3)
-        print("---------------------------------------")
