@@ -10,14 +10,11 @@ from task.settings import SLEEP
 class BaseTask:
     def __init__(self, obj: dict):
         self.isValid = True
-        # self.url = URL_WB_MAIN
-        # self.prices = []
 
         self.obj = obj
         if type(self.obj) != dict:
-            # self.isValid = False
+            self.isValid = False
             self.obj = dict()
-        # self.get_value()
 
     def get_sheet_name(self):
         return self.get_value(Key.sheetName, SheetNames.НеОпределён)
@@ -34,60 +31,37 @@ class BaseTask:
         return ret if ret else default
 
     def __str__(self):
-        return self.get_value(Key.key,"____");
+        return f"""{self.get_value(Key.row, "000"):5} | {self.get_value(Key.sheetName, SheetNames.НеОпределён):12} | {self.get_value(Key.key, "____")}"""
+
 
 class TaskList:
+    SheetNamesList = [
+        SheetNames.Карточки,
+        SheetNames.Предметы,
+        SheetNames.Продавцы,
+    ]
 
-    def get_tasks(self):
-        for obj in self.get_Objs():
-            # print(obj)
-            task = BaseTask(obj)
-            if not task.isValid:
-                continue
+    def get_tasks(self)-> BaseTask:
+        obj = None
+        for sheet_name in self.SheetNamesList:
+            obj = self.get_objs_by_sheet_name(sheet_name=sheet_name, obj=obj)
+            if obj: break
+        task = BaseTask(obj)
+        return task
 
-            if task.obj[Key.key] == Key.wait:
-                sek = task.obj[Key.value]
-                if not sek:
-                    sek = 60 * 15
-                print(f"Ждем Задание {task.obj[Key.key]} {sek} секунд")
-                time.sleep(sek)
-                continue
-
-            yield task
-
-    # count = 0
-    def get_Objs(self):
-        has_error = 0
-        while True:
-            try:
-                response = requests.get(F"{URL_SERVER}?{Key.sheetName}={SheetNames.Предметы}")
-                has_error = 0
-                # print("response.text = ",response.text)
-            except:
-                time.sleep(SLEEP * has_error)
-                has_error += 1
-                if has_error > 20: has_error = 20
-
-            if response.status_code != 200:
-                # sek = 6 * 3
-                # print(f"response.status_code={response.status_code} ждем {sek} секунд")
-                # time.sleep(sek)
-                print("Ошибка при получении задания")
-                yield {Key.key: Key.wait, Key.value: 30}
-
-                continue
-
-            try:
+    def get_objs_by_sheet_name(self, sheet_name, obj=None):
+        # obj = None
+        try:
+            url = F"{URL_SERVER}?{Key.sheetName}={sheet_name}"
+            # print("url = ", url)
+            response = requests.get(url)
+            # print("response.text = ",response.text)
+            if response.text:
                 obj = response.json()
-            except:
-                print("Заданий нет")
-                obj = None
-
-            # print(obj)
-            if not obj:
-                break
-            has_error = 0
-            yield obj
+        except:
+            pass
+            # print("Ошибка при получении задания")
+        return obj
 
     def start(self):
         print("start - TaskList")

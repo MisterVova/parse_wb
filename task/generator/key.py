@@ -10,6 +10,7 @@ class Key:
     wait = "_!_ЖДИ_!_"
     sheetName = "sheetName"
     url = "url"
+    goods_count = "goods_count"
 
 
 class SheetNames:

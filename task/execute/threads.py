@@ -9,7 +9,7 @@ import time
 
 class ThreadParser(threading.Thread):
 
-    def __init__(self, task_list , task_send, task_exe_class, name):
+    def __init__(self, task_list:TaskList , task_send, task_exe_class, name):
         threading.Thread.__init__(self)
         self.name = name
         self.task_list = task_list
@@ -18,20 +18,19 @@ class ThreadParser(threading.Thread):
         self.task_exe = self.task_exe_class()
 
     def run(self):
-        # print(datetime.datetime.now(), "Start")
-
-        # steep = 0
-        for task in self.task_list.get_tasks():
+        while True:
+            task = self.task_list.get_tasks()
+            if not task.isValid:
+                break
+                # time.sleep(300)
             try:
-                print(self.name, task, sep=" | ")
                 self.task_exe.exe(task)
                 self.task_send.exe(task)
-                print(self.name, task, sep=" | ")
-
+                print(self.name, task, task.obj, sep=" | ")
             except:
-                print("Ошибка при парсера")
+                print("Ошибка при парсинге")
                 traceback.print_exc()
-        # print(datetime.datetime.now(), "End")
+
 
     def before_start(self):
         self.task_exe.start()
