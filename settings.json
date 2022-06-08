@@ -3,6 +3,6 @@
     "URL_WB_MAIN": "https://www.wildberries.ru/",
     "URL_WB_SEARCH": "https://www.wildberries.ru/catalog/0/search.aspx?sort=popular&search=",
     "THREADS_COUNT": 5,
-    "WEBDRIVER_HEADLESS": false,
+    "WEBDRIVER_HEADLESS": true,
     "SLEEP": 2
 }

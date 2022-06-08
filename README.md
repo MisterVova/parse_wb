@@ -11,3 +11,5 @@ pip3 install -r requirements.txt
 pip install virtualenvwrapper-win
  
 pip install -r requirements.txt
+
+pyinstaller --onefile main.py
