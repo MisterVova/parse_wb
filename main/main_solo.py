@@ -40,7 +40,7 @@ def work(task_list: TaskList, task_exe: TaskExe, task_send: TaskSend, ):
         #     pass
         task_send.exe(task)
 
-        # print(task.__dict__)
+        # print(tasks.__dict__)
         print(datetime.datetime.now(), "Steep", steep, "Finish", sep=": ")
         steep += 1
         if steep > 10:

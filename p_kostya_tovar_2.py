@@ -28,14 +28,14 @@ class TaskExe:
 
         except Exception as e:
             # print(f"error: '{e.__traceback__}'")
-            # print(task.url)
+            # print(tasks.url)
             # traceback_str = ''.join(traceback.format_tb(e.__traceback__))
             # traceback_str = ''.join(traceback.format_(e.__traceback__))
             # print(f"error: '{traceback_str}'")
             traceback.print_exc()
 
         # for i in range(random.randint(10, 20)):
-        #     task.add_price(random.randint(100, 200))
+        #     tasks.add_price(random.randint(100, 200))
         # time.sleep(SLEEP * 1)
 
         # time.sleep(20)
@@ -162,7 +162,7 @@ class TaskExe:
         # time.sleep(1000)
 
     def parse_card(self, task: Task) -> Task:
-        # print("работает:", task.get_value(Key.key, '123456'))
+        # print("работает:", tasks.get_value(Key.key, '123456'))
         url = f"https://www.wildberries.ru/catalog/{task.get_value(Key.key, '123456')}/detail.aspx?targetUrl=ST"
 
         self.driver.get(url)
@@ -190,7 +190,7 @@ class TaskExe:
                 # page=2
                 # print(pagination_next[0].)
 
-                # self.driver.get(f"{task.url}&page={steep}")
+                # self.driver.get(f"{tasks.url}&page={steep}")
                 #
                 self.actions.click(select_radio__text[1])
                 # self.actions.click(select_radio__text[1])
@@ -286,7 +286,7 @@ if __name__ == '__main__':
         }
 
         task = Task(obj)
-        # print(task.obj)
+        # print(tasks.obj)
         taskExe.exe(task)
         print(task.obj)
 

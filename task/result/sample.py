@@ -7,7 +7,7 @@ class TaskSend:
 
     def exe(self, task):
         print("===")
-        # print(len(task.prices))
+        # print(len(tasks.prices))
         print(task.__dict__)
 
         print("===")

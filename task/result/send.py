@@ -11,10 +11,10 @@ class TaskSend:
     def __init__(self, ):
         pass
 
-    # def exe(self, task: Task):
+    # def exe(self, tasks: Task):
     def exe(self, task: Task):
         # print("===")
-        # print(len(task.prices))
+        # print(len(tasks.prices))
         # data = {"last": "", "prices": "[1,2,3,4,5,6]", "key": "Прикормки для рыб", "isValid": "", "on": "", "row": 18}
         has_error = 0
         while True:
@@ -35,7 +35,7 @@ class TaskSend:
                 if has_error > 20: has_error = 20
 
         # {"last": "", "prices": "[1,2,3,4,5,6]", "key": "Прикормки для рыб", "isValid": "", "on": "", "row": 18}
-        # print(task.__dict__)
+        # print(tasks.__dict__)
         # print("===")
 
     def start(self):

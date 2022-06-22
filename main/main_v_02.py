@@ -3,7 +3,7 @@ import time
 
 
 
-# from task import TaskList
+# from tasks import TaskList
 
 from task import TaskSend
 from task import ThreadTaskExe
@@ -11,7 +11,7 @@ from task.generator.base_task import TaskList, BaseTask as Task
 from task.parser.parser_base_tast import TaskExe
 
 
-# from task.result.sample import TaskSend
+# from tasks.result.sample import TaskSend
 
 def start() -> (TaskList, ThreadTaskExe, TaskSend):
     task_list = TaskList()

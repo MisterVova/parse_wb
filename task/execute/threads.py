@@ -4,7 +4,7 @@ import traceback
 
 from task.generator.base_task import TaskList
 from task.settings import THREADS_COUNT,SLEEP
-# from task import Task
+# from tasks import Task
 import time
 
 class ThreadParser(threading.Thread):

@@ -94,7 +94,7 @@ class TaskExe:
                 #                 pass
                 #             prs = {"p": p, "r": r, "s": s}
                 #             if p:
-                #                 task.add_price(prs)
+                #                 tasks.add_price(prs)
                 #
                 #         except Exception as e:
                 #             traceback_str = ''.join(traceback.format_tb(e.__traceback__))
@@ -140,7 +140,7 @@ class TaskExe:
             print(f"error: '{traceback_str}'")
 
         # for i in range(random.randint(10, 20)):
-        #     task.add_price(random.randint(100, 200))
+        #     tasks.add_price(random.randint(100, 200))
         # time.sleep(SLEEP * 1)
         return task
 

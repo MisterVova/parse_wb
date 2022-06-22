@@ -1,3 +1,4 @@
+import json
 import re
 import traceback
 import time
@@ -9,9 +10,11 @@ from selenium import webdriver
 
 from task.generator.key import Key
 from task.settings import URL_WB_MAIN, SLEEP, WEBDRIVER_HEADLESS
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup  # ,ResultSet
 from task.generator.base_task import BaseTask as Task
 
+from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.support.wait import WebDriverWait
 
 class TaskExe:
 
@@ -23,7 +26,8 @@ class TaskExe:
 
     def exe(self, task) -> Task:
         try:
-            self.parse_card(task)
+            # self.parse_card(tasks)
+            self.parse_foto(task)
 
         except Exception as e:
             # print(f"error: '{e.__traceback__}'")
@@ -160,131 +164,276 @@ class TaskExe:
                         continue
         # time.sleep(1000)
 
-    # def parse_card(self, tasks: Task) -> Task:
-    #     # print("работает:", tasks.get_value(Key.key, '123456'))
-    #     url = f"https://www.wildberries.ru/catalog/{tasks.get_value(Key.key, '123456')}/detail.aspx?targetUrl=ST"
-    #
-    #     self.driver.get(url)
-    #     footer = self.driver.find_elements(by=By.ID, value='footer')
-    #     if len(footer) > 0:
-    #         # print("footer", footer)
-    #         self.actions.move_to_element(footer[0])
-    #         self.actions.perform()
-    #         time.sleep(2)
-    #         self.actions.move_to_element(footer[0])
-    #         self.actions.perform()
-    #
-    #     tabs_content = self.driver.find_elements(by=By.ID, value='tabs-content')
-    #     btn = tabs_content[0].find_elements(by=By.CLASS_NAME, value='select-radio__btn-text')
-    #     if len(btn) > 0:
-    #         self.actions = ActionChains(self.driver, duration=250)
-    #         self.actions.move_to_element_with_offset(btn[0], 5, 5).perform()
-    #         self.actions.scroll(0, 0, 0, 450, duration=5).perform()
-    #         self.actions.move_to_element_with_offset(btn[0], -5, -5).perform()
-    #         self.actions.click(btn[0]).perform()
-    #         select_radio__text = tabs_content[0].find_elements(by=By.CLASS_NAME, value='select-radio__text')
-    #         if len(select_radio__text) > 1:
-    #             self.actions = ActionChains(self.driver, duration=250)
-    #             self.actions.move_to_element_with_offset(select_radio__text[1], 5, 5)
-    #             # page=2
-    #             # print(pagination_next[0].)
-    #
-    #             # self.driver.get(f"{tasks.url}&page={steep}")
-    #             #
-    #             self.actions.click(select_radio__text[1])
-    #             # self.actions.click(select_radio__text[1])
-    #             self.actions.perform()
-    #             time.sleep(SLEEP)
-    #
-    #         else:
-    #             pass
-    #
-    #     container = self.driver.find_elements(by=By.ID, value='container')  # переделать
-    #     # название,
-    #     """ наименование	цена	продано	    Сумма отзывов	Ср рейтинг	начало продаж	дней в продаже	Продавец
-    #         name	        price	count_sold	count_review	count_star	sale_start	    sale_days	    seller"""
-    #
-    #     if len(container) > 0:
-    #         html = container[0].get_attribute("outerHTML")
-    #         soup = BeautifulSoup(html, "html.parser")
-    #         # print(html)
-    #         comments = soup.findAll('li', class_='comments__item')
-    #         if len(comments)>0:
-    #             sale_start = comments[0].find("span",class_='feedback__date').get("content")
-    #             # <span class="feedback__date hide-desktop" itemprop="datePublished" content="2020-12-14T07:34:26Z">14 декабря 2020, 10:34</span>
-    #             tasks.set_value("sale_start", sale_start)
-    #
-    #     # time.sleep(SLEEP*10)
-    #     return tasks
-
-    def confirm_age(self):
-
-        # <button type="button" class="popup__btn-main j-confirm" data-link="{on confirm}" data-jsv="#358^/358^">Да, мне есть 18 лет</button>
-
-        # footer = self.driver.find_elements(by=By.ID, value='footer')
-        # popup-confirm-age
-        popup_confirm_age = self.driver.find_elements(by=By.CLASS_NAME, value='popup-confirm-age')
-        if len(popup_confirm_age) > 1:
-            print("18+ есть")
-            popup__btn_main = popup_confirm_age[0].find_elements(by=By.CLASS_NAME, value="popup__btn-main")
-            if len(popup__btn_main):
-                self.actions.move_to_element(popup__btn_main[0]).perform()
-                time.sleep(SLEEP * 2)
-                self.actions.click().perform()
-                time.sleep(SLEEP * 2)
-                print("18+k")
-        else:
-            print("18+ нет")
-
-    def click_date(self, tt) -> bool:
-        time.sleep(SLEEP)
-        sorting__list = self.driver.find_elements(by=By.CLASS_NAME, value='sorting__list')
-        if len(sorting__list) == 0:
-            print(f"нажимаем sorting__list")
-            return False
-        # sorting__item
-        # time.sleep(SLEEP)
-        sorting__item = self.driver.find_elements(by=By.CLASS_NAME, value='sorting__item')
-        if len(sorting__item) == 0:
-            print(f"нажимаем sorting__item")
-            return False
-
-        a_link = sorting__item[0].find_elements(by=By.TAG_NAME, value="a")
-        if len(a_link) == 0:
-            print(f"нажимаем a_link")
-            return False
-
-        a_date = a_link[0]
-        # try:
-        self.actions.move_to_element(a_date).perform()
-        time.sleep(SLEEP * 2)
-        self.actions.click().perform()
-        time.sleep(SLEEP * 2)
-        # except:
-        #     pass
-
-        span = a_date.find_elements(by=By.TAG_NAME, value="span")
-        if len(span) == 0:
-            print(f"нажимаем span")
-            return False
-
-        # sorting__decor sorting__decor--up
-        classes = span[0].get_attribute("class")
-        print("classes", f"{classes}")
-        if not "sorting__decor--up" in f"{classes}":
-            print(f"нажимаем classes")
-            return False
-
-        print("Все по нажимали")
-        return True
-
     def parse_card(self, task: Task) -> Task:
         # print("работает:", tasks.get_value(Key.key, '123456'))
         url = f"https://www.wildberries.ru/catalog/{task.get_value(Key.key, '123456')}/detail.aspx?targetUrl=ST"
-        self.driver.set_window_size(1200, 900)
-        time.sleep(SLEEP)
+
         self.driver.get(url)
-        time.sleep(SLEEP * 2)
+        footer = self.driver.find_elements(by=By.ID, value='footer')
+        if len(footer) > 0:
+            # print("footer", footer)
+            self.actions.move_to_element(footer[0])
+            self.actions.perform()
+            time.sleep(2)
+            self.actions.move_to_element(footer[0])
+            self.actions.perform()
+
+        tabs_content = self.driver.find_elements(by=By.ID, value='tabs-content')
+        btn = tabs_content[0].find_elements(by=By.CLASS_NAME, value='select-radio__btn-text')
+        if len(btn) > 0:
+            self.actions = ActionChains(self.driver, duration=250)
+            self.actions.move_to_element_with_offset(btn[0], 5, 5).perform()
+            self.actions.scroll(0, 0, 0, 450, duration=5).perform()
+            self.actions.move_to_element_with_offset(btn[0], -5, -5).perform()
+            self.actions.click(btn[0]).perform()
+            select_radio__text = tabs_content[0].find_elements(by=By.CLASS_NAME, value='select-radio__text')
+            if len(select_radio__text) > 1:
+                self.actions = ActionChains(self.driver, duration=250)
+                self.actions.move_to_element_with_offset(select_radio__text[1], 5, 5)
+                # page=2
+                # print(pagination_next[0].)
+
+                # self.driver.get(f"{tasks.url}&page={steep}")
+                #
+                self.actions.click(select_radio__text[1])
+                # self.actions.click(select_radio__text[1])
+                self.actions.perform()
+                time.sleep(SLEEP)
+
+            else:
+                pass
+
+        container = self.driver.find_elements(by=By.ID, value='container')  # переделать
+        # название,
+        """ +наименование	+цена	+продано	    +Сумма отзывов	Ср рейтинг	-начало продаж	-дней в продаже	+Продавец
+            +name	        +price	 count_sold	    +count_review   count_star	-sale_start	    -sale_days	    +seller"""
+
+        if len(container) > 0:
+            html = container[0].get_attribute("outerHTML")
+            soup = BeautifulSoup(html, "html.parser")
+            # print(html)
+            comments = soup.findAll('li', class_='comments__item')
+            if len(comments) > 0:
+                sale_start = comments[0].find("span", class_='feedback__date').get("content")
+                # <span class="feedback__date hide-desktop" itemprop="datePublished" content="2020-12-14T07:34:26Z">14 декабря 2020, 10:34</span>
+                task.set_value("sale_start", sale_start)
+                # from datetime import datetime
+                # print(json.JSONDecoder(f"{sale_start}"))
+                # def fromutcformat(utc_str, tz=None):
+                #     iso_str = utc_str.replace('Z', '+00:00')
+                #     return datetime.fromisoformat(iso_str).astimezone(tz)
+
+                # print(datetime.now() - fromutcformat(sale_start))
+            #  price
+            price = soup.find("span", class_='price-block__final-price').text
+            # price = "".join(re.findall(r'\d+', price))
+            price = float("".join(re.findall(r'\d+', f"{price}")))
+            task.set_value("price", price)
+            # print(price)
+
+            #   name
+            name_brande = soup.find('h1', class_="same-part-kt__header").get_text()
+            # print(name_brande)
+            task.set_value("name", name_brande)
+            #   seller
+
+            # count_sold
+            count_sold = soup.find('p', class_='same-part-kt__order-quantity j-orders-count-wrapper').span.get_text()
+            count_sold = "".join(re.findall(r'\d+', count_sold))
+            count_sold = float("".join(re.findall(r'\d+', f"{count_sold}")))
+            task.set_value("count_sold", count_sold)
+            # print(count_sold)
+
+            # Отзывы count_review
+            count_review = soup.find('a', id="a-Comments").get_text()
+            # count_review = "".join(re.findall(r'\d+', count_review))
+            count_review = float("".join(re.findall(r'\d+', f"{count_review}")))
+            task.set_value("count_review", count_review)
+            # print(count_review)
+
+            # count_star \\
+            count_star = soup.find('span', class_="same-part-kt__rating")
+            count_star = count_star.get("class")
+            count_star = float("".join(re.findall(r'\d+', f"{count_star}")))
+            task.set_value("count_star", count_star)
+            # print(count_star)
+
+            # <div class="seller-details__info">
+            seller = soup.find('div', class_="seller-details__info")
+            seller = seller.find('a', class_="seller-details__title")
+            seller = seller.get("href")
+            seller = float("".join(re.findall(r'\d+', f"{seller}")))
+            task.set_value("seller", seller)
+            # print(seller)
+
+        # time.sleep(SLEEP*10)
+        return task
+
+    def click_cbir_icon(self):
+        cbir_icon = self.driver.find_elements(by=By.CLASS_NAME, value='cbir-icon')
+        if len(cbir_icon) == 0:
+            return task
+        self.actions.move_to_element(cbir_icon[0]).perform()
+        time.sleep(SLEEP * 0.3)
+        self.actions.click().perform()
+        time.sleep(SLEEP * 1)
+
+    def mack_Popup2_visible(self, tr=0):
+        #     Popup2 Popup2_visible Popup2_target_anchor Popup2_view_default CbirPanel-Popup
+        # "body > header > div > div.serp-header__main > div.serp-header__search2 > form > div.search2__input > span > span > button > div"
+        # "/html/body/header/div/div[1]/div[2]/form/div[1]/span/span/button/div"
+        # "class="cbir-icon input__cbir-button-icon""
+        tr += 1
+        if tr > 5: return False
+
+        popup2 = self.driver.find_elements(by=By.CLASS_NAME, value='Popup2_target_anchor')
+        if len(popup2) == 0:
+            self.click_cbir_icon()
+            return self.mack_Popup2_visible(tr)
+
+        popup2_class = popup2[0].get_attribute("class")
+        # print(popup2_class)
+
+        if "Popup2_visible" in popup2_class:
+            # class ="Icon Icon_size_m Icon_hasGlyph Icon_glyph_x-sign Textinput-Icon Textinput-Clear Textinput-Clear_visible"
+            form = self.driver.find_elements(by=By.CLASS_NAME, value='CbirPanel-UrlForm')
+            if len(form) == 0:
+                return False
+
+            form = form[0]
+
+            clear = form.find_elements(by=By.CLASS_NAME, value='Textinput-Clear')
+            if len(clear) > 0:
+                clear_class = clear[0].get_attribute("class")
+                if "Textinput-Clear_visible" in clear_class:
+                    self.actions.move_to_element(clear[0]).perform()
+                    time.sleep(SLEEP * 1)
+                    self.actions.click().perform()
+                    time.sleep(SLEEP * 1)
+            return True
+
+        self.click_cbir_icon()
+        return self.mack_Popup2_visible(tr)
+
+    def insert_url(self, url):
+
+        form = self.driver.find_elements(by=By.CLASS_NAME, value='CbirPanel-UrlForm')
+        if len(form) == 0:
+            return False
+
+        form = form[0]
+
+        input_text = form.find_elements(by=By.TAG_NAME, value='input')
+        button = form.find_elements(by=By.TAG_NAME, value='button')
+
+        if len(input_text) == 0: return False
+        if len(button) == 0: return False
+
+        # print("input", input_text)
+        # print("button", button)
+        # print("url", url)
+
+        self.actions.move_to_element(input_text[0]).perform()
+        time.sleep(SLEEP * 0.2)
+        self.actions.click().perform()
+        time.sleep(SLEEP * 0.2)
+        input_text[0].send_keys(url)
+        time.sleep(SLEEP * 0.5)
+        self.actions.move_to_element(button[0]).perform()
+        time.sleep(SLEEP * 1)
+        self.actions.click().perform()
+        time.sleep(SLEEP * 1)
+
+        wait = WebDriverWait(self.driver, 60)
+        wait.until(ec.presence_of_element_located((By.CLASS_NAME, "CbirSites-Items")))
+        self.move_to_footer()
+        return True
+
+
+    def move_to_footer(self):
+
+        # isDisplayed()
+        footer = self.driver.find_elements(by=By.CLASS_NAME, value='footer')
+        if len(footer) > 0:
+            for i in range(10):
+                # print("footer", footer)
+                footer = self.driver.find_elements(by=By.CLASS_NAME, value='footer')
+                # print(f"is_displayed={i}", footer[0].is_displayed())
+                # time.sleep(SLEEP * 0.1 * 20)
+                self.actions.move_to_element(footer[0])
+                self.actions.perform()
+                time.sleep(SLEEP * 0.1)
+
+                # print(f"is_displayed={i}", footer[0].is_displayed())
+                # if  footer[0].is_displayed() : break
+
+
+    def extract_data(self, task: Task) -> Task:
+        task.set_value("yandex", self.driver.current_url)
+        items = self.driver.find_elements(by=By.CLASS_NAME, value='CbirSites-Items')
+        if len(items)==0:
+            return  task
+
+        html = items[0].get_attribute("outerHTML")
+        soup = BeautifulSoup(html, "html.parser")
+        try:
+            hrefs = []
+            tests = []
+
+            item_title = soup.findAll('div', class_='CbirSites-ItemTitle')
+            for item in item_title:
+            # if len(item_title) > 0:
+                a = item.find("a", class_='Link_view_default')
+                href = a.get("href")
+                test = a.getText()
+                # print(href)
+                # print(test)
+                hrefs.append(href)
+                tests.append(test)
+            task.set_value(Key.value, hrefs)
+            # task.set_value("hrefs", hrefs)
+            # task.set_value("tests", tests)
+        except:
+            pass
+
+        return task
+
+    def parse_foto(self, task: Task) -> Task:
+        # print("работает:", tasks.get_value(Key.key, '123456'))
+        # url = f"https://www.wildberries.ru/catalog/{tasks.get_value(Key.key, '123456')}/detail.aspx?targetUrl=ST"
+
+        yandex_url = "https://yandex.ru/images/search"
+        # print(self.driver.current_url)
+        if not yandex_url in self.driver.current_url:
+            self.driver.get(yandex_url)
+            time.sleep(SLEEP * 2)
+
+        url = f"{task.get_value(Key.url, '')}"
+        self.driver.set_window_size(1200, 900)
+        # time.sleep(SLEEP)
+        # self.driver.get(url)
+        # time.sleep(SLEEP * 2)
+
+        # time.sleep(10)
+        try:
+            if not self.mack_Popup2_visible(): return task
+            if not self.mack_Popup2_visible(): return task
+            if not self.insert_url(url): return task
+
+
+            return self.extract_data(task)
+
+        except Exception as e:
+            # traceback_str = ''.join(traceback.format_tb(e.__traceback__))
+            # print(f"error: '{traceback_str}'")
+            traceback.print_exc()
+            time.sleep(SLEEP * 50)
+            # time.sleep(SLEEP * (t + 1) * 10)
+            self.driver.set_window_size(1200, 900)
+            self.driver.get(url)
+            pass
+
+        return task
 
         self.confirm_age()
         # print("вторая попытка")
@@ -323,7 +472,7 @@ class TaskExe:
                 for tt in range(0, 5):
                     if self.click_date(tt):
                         break
-                    print(f"нажимаем {tt}")
+                    print(f"нажимаем {tt} | {task.get_value(Key.key, 'нет ключа')}")
                     time.sleep(SLEEP * (tt + 0.5) * 0.5)
 
                 # time.sleep(SLEEP * (t + 0.5) * 50)
@@ -422,26 +571,19 @@ class TaskExe:
 
 
 if __name__ == '__main__':
-    art_list = [
-        # "13975629",
-        # "36195395",
-        # "23361750",
-        # "11977345",
-        "71739953",
-        "19029000",
-        "64834786",
-        "57906302",
-        "27836036",
-        "32249824",
-        "17272711",
-    ]
     # pass
+    img_url_list = [
+        "https://images.wbstatic.net/big/new/38920000/38927524-1.jpg",
+        "https://images.wbstatic.net/big/new/29020000/29026906-1.jpg",
+        "https://images.wbstatic.net/big/new/29280000/29287500-2.jpg",
+        "https://images.wbstatic.net/big/new/76940000/76948656-1.jpg"
+    ]
 
     taskExe = TaskExe()
     taskExe.start()
-    for art in art_list:
+    for url in img_url_list:
         obj = {
-            Key.key: f"{art}",
+            Key.url: f"{url}",
 
         }
 
@@ -451,3 +593,4 @@ if __name__ == '__main__':
         print(task.obj)
 
     taskExe.end()
+# """https://www.wildberries.ru/catalog/23361750/detail.aspx?targetUrl=ST"""

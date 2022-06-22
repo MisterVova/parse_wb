@@ -1,15 +1,17 @@
 import datetime
 import time
 
-# from execute import TaskExe
-# from generator import TaskList
-# from result import TaskSend
 
-from task import TaskExe
-from task import TaskList
+
+# from tasks import TaskList
+
 from task import TaskSend
 from task import ThreadTaskExe
+from task.generator.base_task_foto import TaskList, BaseTask as Task
+from task.parser.parser_foto_task import TaskExe
 
+
+# from tasks.result.sample import TaskSend
 
 def start() -> (TaskList, ThreadTaskExe, TaskSend):
     task_list = TaskList()
@@ -32,26 +34,7 @@ def work(task_list: TaskList, task_exe: ThreadTaskExe, task_send: TaskSend, ):
 
     task_exe.start()
     task_exe.join()
-    #
-    # steep = 0
-    # for tasks in task_list.get_tasks():
-    #     print("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv")
-    #     print(datetime.datetime.now(), "Steep", steep, "Start", sep=": ")
-    #     print(tasks.url)
-    #     # try:
-    #     task_exe.exe(tasks)
-    #     # except Exception:
-    #     #     pass
-    #     task_send.exe(tasks)
-    #
-    #     # print(tasks.__dict__)
-    #     print(datetime.datetime.now(), "Steep", steep, "Finish", sep=": ")
-    #     steep += 1
-    #     if steep > 10:
-    #         break
-    #     # time.sleep(1)
-    #     print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
-    #     print()
+
     print(datetime.datetime.now(), "End")
 
 

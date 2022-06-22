@@ -1,0 +1,23 @@
+{
+    "URL_SERVER": "https://script.google.com/macros/s/AKfycbzvKtZYbc7S7i9V7Cz6UNaDjbFx0gYzW8vFPCtAWUITB0oy3Ws-yDiTYK4z6MnHEKIYGw/exec",
+    "URL_YA_MAIN": "https://yandex.ru/images/search",
+    "THREADS_COUNT": 8,
+    "WEBDRIVER_HEADLESS": false,
+    "SLEEP": 2,
+    "FILTER_FOTO": {
+        "ozon": [
+            "/www.ozon.ru/product/"
+        ],
+        "wb": [
+            "/www.wildberries.ru/catalog/",
+            ".wildberries.ru/catalog/"
+        ],
+        "market_yandex": [
+            "/market.yandex.ru/product"
+        ],
+        "sbermegamarket": [
+            "/sbermegamarket.ru/",
+            "/sbermegamarket.ru/catalog/"
+        ]
+    }
+}

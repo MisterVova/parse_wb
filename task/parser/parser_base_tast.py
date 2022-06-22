@@ -2,7 +2,7 @@ import re
 import traceback
 import time
 from datetime import datetime
-# from task import Task
+# from tasks import Task
 
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
@@ -39,13 +39,13 @@ class TaskExe:
 
         except Exception as e:
             # print(f"error: '{e.__traceback__}'")
-            # print(task.url)
+            # print(tasks.url)
             traceback_str = ''.join(traceback.format_tb(e.__traceback__))
             print("\n", ">" * 150)
             print(f"error: '{traceback_str}'")
             print("\n", "<" * 150)
         # for i in range(random.randint(10, 20)):
-        #     task.add_price(random.randint(100, 200))
+        #     tasks.add_price(random.randint(100, 200))
         # time.sleep(SLEEP * 1)
         return task
 
@@ -118,7 +118,7 @@ class TaskExe:
             print(f"error: '{traceback_str}'")
 
         # for i in range(random.randint(10, 20)):
-        #     task.add_price(random.randint(100, 200))
+        #     tasks.add_price(random.randint(100, 200))
         # time.sleep(SLEEP * 1)
         return task
 
@@ -287,9 +287,9 @@ class TaskExe:
         task.set_value(key=Key.value, value=values)
         return task
 
-    # def parse_card(self, task: Task) -> Task:
-    #     # print("работает:", task.get_value(Key.key, '123456'))
-    #     url = f"https://www.wildberries.ru/catalog/{task.get_value(Key.key, '123456')}/detail.aspx?targetUrl=ST"
+    # def parse_card(self, tasks: Task) -> Task:
+    #     # print("работает:", tasks.get_value(Key.key, '123456'))
+    #     url = f"https://www.wildberries.ru/catalog/{tasks.get_value(Key.key, '123456')}/detail.aspx?targetUrl=ST"
     #     self.driver.set_window_size(700, 900)
     #     self.driver.get('chrome://settings/')
     #     self.driver.execute_script('chrome.settingsPrivate.setDefaultZoom(1.5);')
@@ -371,7 +371,7 @@ class TaskExe:
     #             if len(comments) > 0:
     #                 sale_start = comments[0].find("span", class_='feedback__date').get("content")
     #                 # <span class="feedback__date hide-desktop" itemprop="datePublished" content="2020-12-14T07:34:26Z">14 декабря 2020, 10:34</span>
-    #                 task.set_value("sale_start", sale_start)
+    #                 tasks.set_value("sale_start", sale_start)
     #                 # datetime
     #                 # print(datetime.strftime())
     #         except:
@@ -382,7 +382,7 @@ class TaskExe:
     #             price = soup.find("span", class_='price-block__final-price').text
     #             # price = "".join(re.findall(r'\d+', price))
     #             price = float("".join(re.findall(r'\d+', f"{price}")))
-    #             task.set_value("price", price)
+    #             tasks.set_value("price", price)
     #             # print(price)
     #         except:
     #             pass
@@ -391,7 +391,7 @@ class TaskExe:
     #             #   name
     #             name_brande = soup.find('h1', class_="same-part-kt__header").get_text()
     #             # print(name_brande)
-    #             task.set_value("name", name_brande)
+    #             tasks.set_value("name", name_brande)
     #             #   seller
     #         except:
     #             pass
@@ -401,7 +401,7 @@ class TaskExe:
     #             count_sold = soup.find('p', class_='same-part-kt__order-quantity j-orders-count-wrapper').span.get_text()
     #             count_sold = "".join(re.findall(r'\d+', count_sold))
     #             count_sold = float("".join(re.findall(r'\d+', f"{count_sold}")))
-    #             task.set_value("count_sold", count_sold)
+    #             tasks.set_value("count_sold", count_sold)
     #             # print(count_sold)
     #         except:
     #             pass
@@ -411,14 +411,14 @@ class TaskExe:
     #             count_review = soup.find('a', id="a-Comments").get_text()
     #             count_review = "".join(re.findall(r'\d+', count_review))
     #             count_review = float("".join(re.findall(r'\d+', f"{count_review}")))
-    #             task.set_value("count_review", count_review)
+    #             tasks.set_value("count_review", count_review)
     #             # print(count_review)
     #
     #             # count_star \\
     #             count_star = soup.find('span', class_="same-part-kt__rating")
     #             count_star = count_star.get("class")
     #             count_star = float("".join(re.findall(r'\d+', f"{count_star}")))
-    #             task.set_value("count_star", count_star)
+    #             tasks.set_value("count_star", count_star)
     #             # print(count_star)
     #         except:
     #             pass
@@ -429,13 +429,13 @@ class TaskExe:
     #             seller = seller.find('a', class_="seller-details__title")
     #             seller = seller.get("href")
     #             seller = float("".join(re.findall(r'\d+', f"{seller}")))
-    #             task.set_value("seller", seller)
+    #             tasks.set_value("seller", seller)
     #             # print(seller)
     #         except:
     #             pass
-    #     task.set_value("value", url)
+    #     tasks.set_value("value", url)
     #     # time.sleep(SLEEP*10)
-    #     return task
+    #     return tasks
 
     def confirm_age(self):
 
@@ -500,7 +500,7 @@ class TaskExe:
         return True
 
     def parse_card(self, task: Task) -> Task:
-        # print("работает:", task.get_value(Key.key, '123456'))
+        # print("работает:", tasks.get_value(Key.key, '123456'))
         url = f"https://www.wildberries.ru/catalog/{task.get_value(Key.key, '123456')}/detail.aspx?targetUrl=ST"
         self.driver.set_window_size(1200, 900)
         time.sleep(SLEEP)
